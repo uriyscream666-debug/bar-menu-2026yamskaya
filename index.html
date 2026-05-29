@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Барная карта Трактир / Шахерезада 2026">
+  <title>Трактир / Шахерезада 2026 — Барная карта</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <!-- Стартовый экран приветствия -->
+  <section class="hero" id="hero" aria-label="Приветствие">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Барная карта</p>
+      <h1 class="hero__title">Трактир / Шахерезада</h1>
+      <p class="hero__year">2026</p>
+      <p class="hero__tagline">Авторские коктейли, вина и крепкий алкоголь в атмосфере восточной сказки</p>
+      <button type="button" class="btn btn--primary hero__cta" id="openMenuBtn">
+        Открыть меню
+      </button>
+    </div>
+    <div class="hero__ornament hero__ornament--left" aria-hidden="true"></div>
+    <div class="hero__ornament hero__ornament--right" aria-hidden="true"></div>
+  </section>
+
+  <!-- Основное приложение (скрыто до открытия меню) -->
+  <div class="app app--hidden" id="app" aria-hidden="true">
+    <header class="header" id="header">
+      <div class="header__brand">
+        <span class="header__eyebrow">Трактир / Шахерезада</span>
+        <h2 class="header__title">Барная карта 2026</h2>
+      </div>
+      <button type="button" class="btn btn--ghost header__back" id="backToHeroBtn" aria-label="Вернуться на главный экран">
+        На главную
+      </button>
+    </header>
+
+    <main class="main" id="main">
+      <!-- Живой поиск -->
+      <div class="search" role="search">
+        <label class="search__label" for="searchInput">Живой поиск</label>
+        <div class="search__field">
+          <svg class="search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20L16 16"></path>
+          </svg>
+          <input
+            type="search"
+            class="search__input"
+            id="searchInput"
+            placeholder="Напиток, ингредиент, категория…"
+            autocomplete="off"
+            enterkeyhint="search"
+          >
+          <button type="button" class="search__clear" id="searchClearBtn" aria-label="Очистить поиск" hidden>
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <p class="search__hint" id="searchHint">Начните вводить название или ингредиент</p>
+      </div>
+
+      <!-- Динамические вкладки категорий -->
+      <nav class="tabs" id="tabsNav" aria-label="Категории меню">
+        <div class="tabs__scroll" id="tabsScroll" role="tablist"></div>
+      </nav>
+
+      <!-- Сетка карточек -->
+      <section class="menu" aria-label="Список напитков">
+        <p class="menu__empty" id="menuEmpty" hidden>
+          По вашему запросу ничего не найдено. Попробуйте изменить поиск или выбрать другую категорию.
+        </p>
+        <div class="menu__grid" id="menuGrid" role="list"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p class="footer__text">Трактир / Шахерезада · Барная карта 2026</p>
+      <p class="footer__note">Алкоголь противопоказан несовершеннолетним. Употребляйте ответственно.</p>
+    </footer>
+  </div>
+
+  <!-- Модальное окно (скрыто по умолчанию) -->
+  <div class="modal" id="drinkModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal__backdrop" id="modalBackdrop" tabindex="-1"></div>
+    <div class="modal__panel" role="document">
+      <button type="button" class="modal__close" id="modalCloseBtn" aria-label="Закрыть">
+        <span aria-hidden="true">×</span>
+      </button>
+      <header class="modal__header">
+        <p class="modal__category" id="modalCategory"></p>
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <p class="modal__meta" id="modalMeta"></p>
+      </header>
+      <div class="modal__body">
+        <p class="modal__description" id="modalDescription"></p>
+
+        <section class="modal__block">
+          <h4 class="modal__block-title">Состав</h4>
+          <ul class="modal__list" id="modalIngredients"></ul>
+        </section>
+
+        <section class="modal__block">
+          <h4 class="modal__block-title">Аллергены</h4>
+          <p class="modal__allergens" id="modalAllergens"></p>
+        </section>
+
+        <section class="modal__block modal__block--script">
+          <h4 class="modal__block-title">Скрипт для официанта</h4>
+          <blockquote class="modal__script" id="modalWaiterScript"></blockquote>
+          <button type="button" class="btn btn--secondary modal__copy" id="copyScriptBtn">
+            Скопировать скрипт
+          </button>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+</body>
+</html>
