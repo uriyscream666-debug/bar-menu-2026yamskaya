@@ -84,17 +84,25 @@ function renderTabs() {
 }
 
 function renderMenu(items) {
-    const menuGrid = document.getElementById('menuGrid') || document.getElementById('menu-grid') || document.querySelector('.grid') || document.querySelector('.menu-grid');
+  const menuGrid = document.getElementById('menuGrid') || document.getElementById('menu-grid') || document.querySelector('.grid') || document.querySelector('.menu-grid') || document.getElementById('menuGrid1');
   const menuEmpty = document.getElementById('menuEmpty') || document.getElementById('menu-empty') || document.querySelector('.empty-message') || document.querySelector('.menu-empty');
-  if (!menuGrid) return;
   
+  if (!menuGrid) {
+    const mainContainer = document.getElementById('app') || document.querySelector('.container') || document.body;
+    const newGrid = document.createElement('div');
+    newGrid.id = 'menuGrid';
+    newGrid.className = 'grid';
+    mainContainer.appendChild(newGrid);
+    return renderMenu(items);
+  }
+
   menuGrid.innerHTML = "";
   
   if (items.length === 0) {
-    if (menuEmpty) menuEmpty.hidden = false;
+    if (menuEmpty) menuEmpty.style.display = 'block';
     return;
   }
-  if (menuEmpty) menuEmpty.hidden = true;
+  if (menuEmpty) menuEmpty.style.display = 'none';
   
   items.forEach(item => {
     const card = document.createElement('div');
@@ -118,17 +126,19 @@ function renderMenu(items) {
 }
 
 function setupSearch() {
-  const searchInput = document.getElementById('searchInput');
+  const searchInput = document.getElementById('searchInput') || document.querySelector('.search-box') || document.querySelector('input[type="text"]');
   const searchClearBtn = document.getElementById('searchClearBtn');
   
-  searchInput?.addEventListener('input', (e) => {
+  if (!searchInput) return;
+  
+  searchInput.addEventListener('input', (e) => {
     const val = e.target.value.toLowerCase().trim();
     if (val === "") {
-      if (searchClearBtn) searchClearBtn.hidden = true;
+      if (searchClearBtn) searchClearBtn.style.display = 'none';
       renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
       return;
     }
-    if (searchClearBtn) searchClearBtn.hidden = false;
+    if (searchClearBtn) searchClearBtn.style.display = 'block';
     
     const filtered = BAR_MENU.filter(item => 
       item.name.toLowerCase().includes(val) || 
@@ -139,32 +149,33 @@ function setupSearch() {
   });
   
   searchClearBtn?.addEventListener('click', () => {
-    if (searchInput) searchInput.value = "";
-    if (searchClearBtn) searchClearBtn.hidden = true;
+    searchInput.value = "";
+    searchClearBtn.style.display = 'none';
     renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
   });
 }
 
 function setupModal() {
-  const modal = document.getElementById('drinkModal');
-  const closeBtn = document.getElementById('modalCloseBtn');
-  const backdrop = document.getElementById('modalBackdrop');
+  const closeBtn = document.getElementById('modalCloseBtn') || document.querySelector('.modal-close') || document.querySelector('.close');
+  const backdrop = document.getElementById('modalBackdrop') || document.getElementById('drinkModal') || document.getElementById('modal');
   
   closeBtn?.addEventListener('click', closeModal);
-  backdrop?.addEventListener('click', closeModal);
+  if (backdrop && backdrop.classList.contains('modal-back')) {
+    backdrop.addEventListener('click', (e) => { if(e.target === backdrop) closeModal(); });
+  }
 }
 
 function openModal(item) {
-  const modal = document.getElementById('drinkModal');
+  const modal = document.getElementById('drinkModal') || document.getElementById('modal');
   if (!modal) return;
+  
   const modalCategory = document.getElementById('modalCategory');
-  const modalTitle = document.getElementById('modalTitle');
+  const modalTitle = document.getElementById('modalTitle') || modal.querySelector('h3') || modal.querySelector('.modal-title');
   const modalVolume = document.getElementById('modalVolume');
-  const modalPrice = document.getElementById('modalPrice');
-  const modalDesc = document.getElementById('modalDesc');
-  const ingContainer = document.getElementById('modalIngredients');
+  const modalPrice = document.getElementById('modalPrice') || modal.querySelector('.price') || modal.querySelector('.modal-price');
+  const modalDesc = document.getElementById('modalDesc') || modal.querySelector('.modal-desc') || modal.querySelector('p');
+  const ingContainer = document.getElementById('modalIngredients') || modal.querySelector('.modal-ing') || modal.querySelector('.modal-ingredients');
   const algContainer = document.getElementById('modalAllergens');
-  const scriptContainer = document.getElementById('modalWaiterScript');
 
   if (modalCategory) modalCategory.textContent = categories[item.category] || "";
   if (modalTitle) modalTitle.textContent = item.name;
@@ -182,19 +193,33 @@ function openModal(item) {
     }
   }
   
+  const body = modal.querySelector('.modal-body') || modal.querySelector('.modal-box') || modal;
+  let scriptContainer = document.getElementById('modalWaiterScript');
+  if (!scriptContainer && body) {
+    scriptContainer = document.createElement('div');
+    scriptContainer.id = "modalWaiterScript";
+    scriptContainer.style.marginTop = "1rem";
+    scriptContainer.style.padding = "0.8rem";
+    scriptContainer.style.background = "rgba(214,175,55,0.05)";
+    scriptContainer.style.borderLeft = "3px solid var(--gold)";
+    body.appendChild(scriptContainer);
+  }
+  
   if (scriptContainer) {
     scriptContainer.innerHTML = `<p style="font-style: italic; color: #ced4da;">💡 <strong>Подсказка официанту:</strong> Предложите данный напиток в качестве идеального дополнения к основным летним блюдам заведения.</p>`;
   }
 
   modal.removeAttribute('aria-hidden');
   modal.style.display = "flex";
+  modal.classList.add('open');
 }
 
 function closeModal() {
-  const modal = document.getElementById('drinkModal');
+  const modal = document.getElementById('drinkModal') || document.getElementById('modal');
   if (!modal) return;
   modal.setAttribute('aria-hidden', 'true');
   modal.style.display = "none";
+  modal.classList.remove('open');
 }
 
 function setupTest() {
@@ -202,10 +227,10 @@ function setupTest() {
   if (!testBtn) return;
   
   testBtn.addEventListener('click', () => {
-    const menuGrid = document.getElementById('menuGrid') || document.getElementById('menuGrid1');
+    const menuGrid = document.getElementById('menuGrid') || document.getElementById('menu-grid') || document.querySelector('.grid') || document.getElementById('menuGrid1');
     if (!menuGrid) return;
     
-    const tabsNav = document.getElementById('tabsNav') || document.getElementById('tabs_scroll') || document.getElementById('tabs');
+    const tabsNav = document.getElementById('tabsNav') || document.getElementById('tabs_scroll') || document.getElementById('tabs') || document.getElementById('nav');
     if (tabsNav) tabsNav.style.display = "none";
     
     const searchWrapper = document.querySelector('.search-bar-wrapper') || document.querySelector('.search-box') || document.getElementById('searchInput');
@@ -264,30 +289,3 @@ function setupTest() {
           } else {
             btn.style.background = "rgba(255,107,107,0.2)";
             btn.style.borderColor = "#ff6b6b";
-            const correctBtn = optionsBlock.children[q.correctAnswerIndex];
-            if (correctBtn) {
-              correctBtn.style.background = "rgba(107,255,107,0.2)";
-              correctBtn.style.borderColor = "#6bff6b";
-            }
-          }
-          document.getElementById('explanationBlock').style.display = "block";
-          const nextBtn = document.getElementById('nextQBtn');
-          nextBtn.style.display = "block";
-          nextBtn.onclick = () => {
-            currentQuestionIndex++;
-            renderQuestion();
-          };
-        };
-        optionsBlock.appendChild(btn);
-      });
-    }
-    
-    renderQuestion();
-  });
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initApp);
-} else {
-  initApp();
-}
