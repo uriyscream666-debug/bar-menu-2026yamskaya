@@ -298,41 +298,43 @@ function setupTest() {
 }
 
 function initApp() {
-    currentCategory = "water";
+  currentCategory = "water";
   
-  // Принудительный рендер вкладок в блок tabsNav
-  const altTabs = document.getElementById('tabs_scroll') || document.getElementById('tabsScroll') || document.getElementById('tabsNav') || document.getElementById('tabs');
-  if (altTabs) {
-    altTabs.innerHTML = "";
-    Object.keys(categories).forEach(key => {
-      const btn = document.createElement('button');
-      btn.className = `nav-btn ${key === currentCategory ? 'active' : ''}`;
-      btn.style.cssText = "padding: 0.5rem 1rem; background: rgba(214,175,55,0.1); border: 1px solid var(--gold); color: var(--text-main); border-radius: 20px; cursor: pointer; margin-right: 0.5rem; white-space: nowrap; font-family:'Montserrat',sans-serif; font-size:0.9rem;";
-      btn.textContent = categories[key];
-      btn.onclick = () => {
-        currentCategory = key;
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
-      };
-      altTabs.appendChild(btn);
-    });
-  }
-
-  renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
-  setupSearch();
-  setupModal();
-  setupTest();
-  
-  // Связывание стартовой кнопки приветствия с приложением
+  // Находим элементы интерфейса
   const startBtn = document.getElementById('startBtn') || document.querySelector('.btn-gold') || document.querySelector('button');
   const hero = document.getElementById('hero') || document.querySelector('.hero');
-  const app = document.getElementById('app') || document.querySelector('.container') || document.body;
+  const app = document.getElementById('app') || document.querySelector('.container');
   
   if (startBtn && hero && app) {
     startBtn.onclick = function() {
+      // 1. Показываем приложение и скрываем заставку
       hero.style.display = 'none';
       app.style.display = 'block';
+      
+      // 2. Строго ПОСЛЕ отображения контейнера рендерим вкладки и напитки
+      const altTabs = document.getElementById('tabs_scroll') || document.getElementById('tabsScroll') || document.getElementById('tabsNav') || document.getElementById('tabs');
+      if (altTabs) {
+        altTabs.innerHTML = "";
+        Object.keys(categories).forEach(key => {
+          const btn = document.createElement('button');
+          btn.className = `nav-btn ${key === currentCategory ? 'active' : ''}`;
+          btn.style.cssText = "padding: 0.5rem 1rem; background: rgba(214,175,55,0.1); border: 1px solid var(--gold); color: var(--text-main); border-radius: 20px; cursor: pointer; margin-right: 0.5rem; white-space: nowrap; font-family:'Montserrat',sans-serif; font-size:0.9rem;";
+          btn.textContent = categories[key];
+          btn.onclick = () => {
+            currentCategory = key;
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
+          };
+          altTabs.appendChild(btn);
+        });
+      }
+      
+      // 3. Запускаем контент, поиск и модальные окна
+      renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
+      setupSearch();
+      setupModal();
+      setupTest();
     };
   }
 }
