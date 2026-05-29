@@ -289,3 +289,59 @@ function setupTest() {
           } else {
             btn.style.background = "rgba(255,107,107,0.2)";
             btn.style.borderColor = "#ff6b6b";
+        };
+        optionsBlock.appendChild(btn);
+      });
+    }
+    renderQuestion();
+  });
+}
+
+function initApp() {
+  // Выбираем категорию первого доступного напитка, если дефолтная пуста
+  if (BAR_MENU.length > 0 && BAR_MENU.filter(item => item.category === currentCategory).length === 0) {
+    currentCategory = BAR_MENU[0].category;
+  }
+  
+  // Принудительный рендер вкладок в блок tabsNav
+  const altTabs = document.getElementById('tabs_scroll') || document.getElementById('tabsScroll') || document.getElementById('tabsNav') || document.getElementById('tabs');
+  if (altTabs) {
+    altTabs.innerHTML = "";
+    Object.keys(categories).forEach(key => {
+      const btn = document.createElement('button');
+      btn.className = `nav-btn ${key === currentCategory ? 'active' : ''}`;
+      btn.style.cssText = "padding: 0.5rem 1rem; background: rgba(214,175,55,0.1); border: 1px solid var(--gold); color: var(--text-main); border-radius: 20px; cursor: pointer; margin-right: 0.5rem; white-space: nowrap; font-family:'Montserrat',sans-serif; font-size:0.9rem;";
+      btn.textContent = categories[key];
+      btn.onclick = () => {
+        currentCategory = key;
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
+      };
+      altTabs.appendChild(btn);
+    });
+  }
+
+  renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
+  setupSearch();
+  setupModal();
+  setupTest();
+  
+  // Связывание стартовой кнопки приветствия с приложением
+  const startBtn = document.getElementById('startBtn') || document.querySelector('.btn-gold') || document.querySelector('button');
+  const hero = document.getElementById('hero') || document.querySelector('.hero');
+  const app = document.getElementById('app') || document.querySelector('.container') || document.body;
+  
+  if (startBtn && hero && app) {
+    startBtn.onclick = function() {
+      hero.style.display = 'none';
+      app.style.display = 'block';
+    };
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
