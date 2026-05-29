@@ -84,8 +84,8 @@ function renderTabs() {
 }
 
 function renderMenu(items) {
-  const menuGrid = document.getElementById('menuGrid');
-  const menuEmpty = document.getElementById('menuEmpty');
+    const menuGrid = document.getElementById('menuGrid') || document.getElementById('menu-grid') || document.querySelector('.grid') || document.querySelector('.menu-grid');
+  const menuEmpty = document.getElementById('menuEmpty') || document.getElementById('menu-empty') || document.querySelector('.empty-message') || document.querySelector('.menu-empty');
   if (!menuGrid) return;
   
   menuGrid.innerHTML = "";
