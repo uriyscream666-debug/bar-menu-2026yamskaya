@@ -157,3 +157,137 @@ function setupModal() {
 function openModal(item) {
   const modal = document.getElementById('drinkModal');
   if (!modal) return;
+  const modalCategory = document.getElementById('modalCategory');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalVolume = document.getElementById('modalVolume');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalDesc = document.getElementById('modalDesc');
+  const ingContainer = document.getElementById('modalIngredients');
+  const algContainer = document.getElementById('modalAllergens');
+  const scriptContainer = document.getElementById('modalWaiterScript');
+
+  if (modalCategory) modalCategory.textContent = categories[item.category] || "";
+  if (modalTitle) modalTitle.textContent = item.name;
+  if (modalVolume) modalVolume.textContent = item.volume;
+  if (modalPrice) modalPrice.textContent = `${item.price} ₽`;
+  if (modalDesc) modalDesc.textContent = item.description;
+  
+  if (ingContainer) ingContainer.innerHTML = item.ingredients.map(i => `<span class="tag">${i}</span>`).join('');
+  
+  if (algContainer) {
+    if (item.allergens.length > 0) {
+      algContainer.innerHTML = `<p style="color: #ff6b6b; font-weight: bold;">Аллергены: ${item.allergens.join(', ')}</p>`;
+    } else {
+      algContainer.innerHTML = `<p style="color: #6bff6b;">Аллергенов не обнаружено</p>`;
+    }
+  }
+  
+  if (scriptContainer) {
+    scriptContainer.innerHTML = `<p style="font-style: italic; color: #ced4da;">💡 <strong>Подсказка официанту:</strong> Предложите данный напиток в качестве идеального дополнения к основным летним блюдам заведения.</p>`;
+  }
+
+  modal.removeAttribute('aria-hidden');
+  modal.style.display = "flex";
+}
+
+function closeModal() {
+  const modal = document.getElementById('drinkModal');
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'true');
+  modal.style.display = "none";
+}
+
+function setupTest() {
+  const testBtn = document.getElementById('testBtn');
+  if (!testBtn) return;
+  
+  testBtn.addEventListener('click', () => {
+    const menuGrid = document.getElementById('menuGrid') || document.getElementById('menuGrid1');
+    if (!menuGrid) return;
+    
+    const tabsNav = document.getElementById('tabsNav') || document.getElementById('tabs_scroll') || document.getElementById('tabs');
+    if (tabsNav) tabsNav.style.display = "none";
+    
+    const searchWrapper = document.querySelector('.search-bar-wrapper') || document.querySelector('.search-box') || document.getElementById('searchInput');
+    if (searchWrapper) searchWrapper.style.display = "none";
+    
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    function renderQuestion() {
+      if (currentQuestionIndex >= BAR_TEST.length) {
+        let rating = score === BAR_TEST.length ? "Отлично! Аттестация пройдена." : "Нужно повторить методичку.";
+        menuGrid.innerHTML = `
+          <div style="text-align: center; width: 100%; padding: 2rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--gold);">
+            <h2 style="color: var(--gold); margin-bottom: 1rem;">Тестирование завершено</h2>
+            <p style="font-size: 1.5rem; margin-bottom: 1rem;">Ваш результат: <strong>${score} из ${BAR_TEST.length}</strong></p>
+            <p style="font-style: italic; color: var(--text-muted); margin-bottom: 2rem;">${rating}</p>
+            <button onclick="window.location.reload()" class="btn-gold" style="font-size: 1rem; padding: 0.5rem 1.5rem; border-radius:20px; cursor:pointer;">Вернуться в меню</button>
+          </div>
+        `;
+        return;
+      }
+      
+      const q = BAR_TEST[currentQuestionIndex];
+      menuGrid.innerHTML = `
+        <div style="width: 100%; max-width: 600px; margin: 0 auto; background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid rgba(214,175,55,0.3);">
+          <p style="color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">Вопрос ${currentQuestionIndex + 1} из ${BAR_TEST.length}</p>
+          <h3 style="margin-bottom: 1.5rem; font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;">${q.question}</h3>
+          <div id="optionsBlock" style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;"></div>
+          <div id="explanationBlock" style="display: none; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 1.5rem; border-left: 3px solid var(--gold);">
+            <p style="font-size: 0.9rem; line-height: 1.4;">${q.explanation}</p>
+          </div>
+          <button id="nextQBtn" class="btn-gold" style="display: none; font-size: 1rem; padding: 0.5rem 1.5rem; margin-left: auto; border-radius:20px; cursor:pointer;">Следующий вопрос</button>
+        </div>
+      `;
+      
+      const optionsBlock = document.getElementById('optionsBlock');
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.style.width = "100%";
+        btn.style.padding = "0.8rem 1.2rem";
+        btn.style.textAlign = "left";
+        btn.style.background = "rgba(255,255,255,0.02)";
+        btn.style.border = "1px solid rgba(214,175,55,0.2)";
+        btn.style.color = "var(--text-main)";
+        btn.style.borderRadius = "8px";
+        btn.style.cursor = "pointer";
+        btn.style.transition = "0.2s";
+        btn.textContent = opt;
+        
+        btn.onclick = () => {
+          document.querySelectorAll('#optionsBlock button').forEach(b => b.disabled = true);
+          if (idx === q.correctAnswerIndex) {
+            btn.style.background = "rgba(107,255,107,0.2)";
+            btn.style.borderColor = "#6bff6b";
+            score++;
+          } else {
+            btn.style.background = "rgba(255,107,107,0.2)";
+            btn.style.borderColor = "#ff6b6b";
+            const correctBtn = optionsBlock.children[q.correctAnswerIndex];
+            if (correctBtn) {
+              correctBtn.style.background = "rgba(107,255,107,0.2)";
+              correctBtn.style.borderColor = "#6bff6b";
+            }
+          }
+          document.getElementById('explanationBlock').style.display = "block";
+          const nextBtn = document.getElementById('nextQBtn');
+          nextBtn.style.display = "block";
+          nextBtn.onclick = () => {
+            currentQuestionIndex++;
+            renderQuestion();
+          };
+        };
+        optionsBlock.appendChild(btn);
+      });
+    }
+    
+    renderQuestion();
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
