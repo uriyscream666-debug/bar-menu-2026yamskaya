@@ -298,10 +298,7 @@ function setupTest() {
 }
 
 function initApp() {
-  // Выбираем категорию первого доступного напитка, если дефолтная пуста
-  if (BAR_MENU.length > 0 && BAR_MENU.filter(item => item.category === currentCategory).length === 0) {
-    currentCategory = BAR_MENU[0].category;
-  }
+    currentCategory = "water";
   
   // Принудительный рендер вкладок в блок tabsNav
   const altTabs = document.getElementById('tabs_scroll') || document.getElementById('tabsScroll') || document.getElementById('tabsNav') || document.getElementById('tabs');
