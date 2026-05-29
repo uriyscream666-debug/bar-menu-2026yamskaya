@@ -1,44 +1,56 @@
-// ================= DATA =================
+// ================= БАЗА ДАННЫХ БАРНОЙ КАРТЫ (ВСЕ ПОЗИЦИИ ИЗ МЕТОДИЧКИ И PDF) =================
 const BAR_MENU = [
-  // МИНЕРАЛЬНАЯ ВОДА
-  { id: 1, name: "Байкал Газ/Негаз", price: 390, volume: "530 мл", description: "Мягкая столовая вода", ingredients: ["Природная вода Байкала"], allergens: [], category: "water", tags: ["Освежающий"] },
-  { id: 2, name: "Недра Газ/Негаз", price: 610, volume: "750 мл", description: "Премиальная артезианская вода", ingredients: ["Артезианская вода высшей категории"], allergens: [], category: "water", tags: ["Премиум"] },
-  { id: 3, name: "Боржоми", price: 450, volume: "500 мл", description: "Легендарная грузинская минеральная вода", ingredients: ["Минеральная вода Боржоми"], allergens: ["Минеральные соли"], category: "water", tags: ["Классика"] },
+  // 1. МИНЕРАЛЬНАЯ ВОДА
+  { id: 1, name: "Байкал Газ/Негаз", price: 390, volume: "530 мл", description: "Мягкая природная столовая вода из глубин Байкала", ingredients: ["Природная вода Байкала"], allergens: [], category: "water", tags: ["Освежающий"] },
+  { id: 2, name: "Недра Газ/Негаз", price: 610, volume: "750 мл", description: "Премиальная артезианская вода высшей категории", ingredients: ["Артезианская вода высшей категории"], allergens: [], category: "water", tags: ["Премиум"] },
+  { id: 3, name: "Боржоми", price: 450, volume: "500 мл", description: "Легендарная грузинская лечебно-столовая минеральная вода", ingredients: ["Минеральная вода Боржоми"], allergens: ["Минеральные соли"], category: "water", tags: ["Классика"] },
 
-  // БЕЗАЛКОГОЛЬНЫЕ НАПИТКИ
-  { id: 4, name: "Сок ВИЗ в ассортименте", price: 380, volume: "0.2 л", description: "Натуральный сок на выбор", ingredients: ["Апельсин", "Яблоко", "Томат"], allergens: [], category: "nonalc", tags: ["Натуральный"] },
-  { id: 5, name: "Фреш Свежевыжатый", price: 460, volume: "0.2 л", description: "Свежевыжатый сок премиум качества", ingredients: ["Апельсин", "Грейпфрут", "Яблоко"], allergens: ["Цитрус"], category: "nonalc", tags: ["Витаминный"] },
-  { id: 6, name: "Классические Газировки", price: 360, volume: "0.25 л", description: "Освежающие газированные напитки", ingredients: ["Кола", "Фанта", "Спрайт"], allergens: [], category: "nonalc", tags: ["Освежающий"] },
-  { id: 7, name: "Тоник в ассортименте", price: 370, volume: "0.2 л", description: "Горьковато-сладкий тоник", ingredients: ["Классический тоник", "Имбирный тоник"], allergens: [], category: "nonalc", tags: ["Освежающий"] },
+  // 2. БЕЗАЛКОГОЛЬНЫЕ НАПИТКИ И СОКИ
+  { id: 4, name: "Сок ВИЗ Апельсин", price: 380, volume: "0.2 л", description: "Натуральный апельсиновый сок", ingredients: ["Апельсиновый сок восстановленный"], allergens: [], category: "nonalc", tags: ["Натуральный"] },
+  { id: 5, name: "Сок ВИЗ Яблоко", price: 380, volume: "0.2 л", description: "Натуральный яблочный сок", ingredients: ["Яблочный сок восстановленный"], allergens: [], category: "nonalc", tags: ["Натуральный"] },
+  { id: 6, name: "Сок ВИЗ Томат", price: 380, volume: "0.2 л", description: "Натуральный томатный сок с солью", ingredients: ["Томатный сок", "Соль"], allergens: [], category: "nonalc", tags: ["Натуральный"] },
+  { id: 7, name: "Фреш Апельсин", price: 460, volume: "0.2 л", description: "Свежевыжатый сок из спелых апельсинов", ingredients: ["Свежий апельсин 100%"], allergens: ["Цитрус"], category: "nonalc", tags: ["Витаминный", "Хит"] },
+  { id: 8, name: "Фреш Грейпфрут", price: 460, volume: "0.2 л", description: "Свежевыжатый сок с благородной горчинкой", ingredients: ["Свежий грейпфрут 100%"], allergens: ["Цитрус"], category: "nonalc", tags: ["Витаминный"] },
+  { id: 9, name: "Фреш Яблоко", price: 460, volume: "0.2 л", description: "Свежевыжатый яблочный сок", ingredients: ["Свежее яблоко 100%"], allergens: [], category: "nonalc", tags: ["Витаминный"] },
+  { id: 10, name: "Кока-Кола / Фанта / Спрайт", price: 360, volume: "0.25 л", description: "Классические прохладительные сильногазированные напитки", ingredients: ["Классическая газировка в стекле"], allergens: [], category: "nonalc", tags: ["Освежающий"] },
+  { id: 11, name: "Тоник Классический", price: 370, volume: "0.2 л", description: "Классический горьковатый тоник для коктейлей", ingredients: ["Тоник классический"], allergens: [], category: "nonalc", tags: ["Освежающий"] },
+  { id: 12, name: "Тоник Имбирный", price: 370, volume: "0.2 л", description: "Пряный тоник с экстрактом натурального имбиря", ingredients: ["Имбирный тоник", "Экстракт имбиря"], allergens: [], category: "nonalc", tags: ["Пряный"] },
 
-  // ЛИМОНАДЫ И СМУЗИ
-  { id: 8, name: "Лимонады Шахерезада Фирменные", price: 540, volume: "400 мл", description: "Авторские освежающие лимонады", ingredients: ["Домашний сироп", "Свежие ягоды", "Мята", "Содовая"], allergens: [], category: "lemonades", tags: ["Хит"] },
-  { id: 9, name: "Смузи Ягодный микс", price: 590, volume: "350 мл", description: "Густой витаминный напиток", ingredients: ["Клубника", "Малина", "Черника", "Банановая база"], allergens: [], category: "lemonades", tags: ["ЗОЖ"] },
+  // 3. ЛИМОНАДЫ И СМУЗИ
+  { id: 13, name: "Лимонад Шахерезада Фирменный", price: 540, volume: "400 мл", description: "Освежающий авторский лимонад с восточными нотами", ingredients: ["Домашний цитрусовый сироп", "Свежая мята", "Содовая", "Экстракт розы"], allergens: ["Цитрус"], category: "lemonades", tags: ["Хит", "Авторский"] },
+  { id: 14, name: "Смузи Ягодный микс", price: 590, volume: "350 мл", description: "Густой ягодный коктейль на натуральной основе", ingredients: ["Клубника", "Малина", "Черника", "Банановое пюре"], allergens: [], category: "lemonades", tags: ["ЗОЖ", "Сладкий"] },
 
-  // АЛКОГОЛЬНЫЕ НАПИТКИ И НАСТОЙКИ
-  { id: 10, name: "Водка Ники Пьюр (Niki Pure)", price: 420, volume: "50 мл", description: "Эксклюзивная супер-мягкая водка", ingredients: ["Спирт Альфа", "Артезианская вода", "Серебряная фильтрация"], allergens: [], category: "alcohol", tags: ["Премиум", "Эксклюзив"] },
-  { id: 11, name: "Водка Царская Оригинальная", price: 350, volume: "50 мл", description: "Классическая русская водка", ingredients: ["Спирт Люкс", "Липовый цвет", "Мед натуральный"], allergens: ["Мед"], category: "alcohol", tags: ["Классика"] },
-  { id: 12, name: "Фирменная Настойка Хреновуха", price: 380, volume: "50 мл", description: "Острая домашняя настойка на водки Ники Пьюр", ingredients: ["Водка Ники Пьюр", "Корень хрена", "Мед алтайский", "Лимонный сок"], allergens: ["Мед"], category: "alcohol", tags: ["Авторский", "Острый"] },
-  { id: 13, name: "Фирменная Настойка Ягодная", price: 380, volume: "50 мл", description: "Сладкая настойка на лесных ягодах", ingredients: ["Водка Ники Пьюр", "Клюква", "Брусника", "Сахарный сироп"], allergens: [], category: "alcohol", tags: ["Сладкий"] },
+  // 4. КРЕПКИЙ АЛКОГОЛЬ И НАСТОЙКИ (НА ВОДКЕ NIKI PURE И ЦАРСКОЙ)
+  { id: 15, name: "Водка Ники Пьюр (Niki Pure)", price: 420, volume: "50 мл", description: "Эксклюзивная водка ультра-премиум класса на спирте Альфа", ingredients: ["Спирт Альфа", "Артезианская вода", "Серебряная фильтрация"], allergens: [], category: "alcohol", tags: ["Премиум", "Эксклюзив"] },
+  { id: 16, name: "Водка Царская Оригинальная", price: 350, volume: "50 мл", description: "Традиционная русская водка высшего качества", ingredients: ["Спирт Люкс", "Липовый цвет", "Мед натуральный"], allergens: ["Мед"], category: "alcohol", tags: ["Классика"] },
+  { id: 17, name: "Настойка Хреновуха Домашняя", price: 380, volume: "50 мл", description: "Жгучая фирменная настойка на водке Niki Pure", ingredients: ["Водка Ники Пьюр", "Свежий корень хрена", "Мед алтайский", "Лимонный сок"], allergens: ["Мед"], category: "alcohol", tags: ["Острый", "Хит"] },
+  { id: 18, name: "Настойка Бородинская", price: 380, volume: "50 мл", description: "Пряная настойка с ароматом ржаного хлеба", ingredients: ["Водка Ники Пьюр", "Бородинский хлеб", "Кориандр", "Тмин"], allergens: ["Глютен"], category: "alcohol", tags: ["Пряный"] },
+  { id: 19, name: "Настойка Ягодная Клюквенная", price: 380, volume: "50 мл", description: "Кисло-сладкая мягкая настойка на лесных ягодах", ingredients: ["Водка Ники Пьюр", "Свежая клюква", "Сахарный сироп"], allergens: [], category: "alcohol", tags: ["Сладкий"] },
+  { id: 20, name: "Джин Hendrick's", price: 850, volume: "50 мл", description: "Премиальный шотландский джин с уникальным ботаническим профилем", ingredients: ["Дистиллят можжевельника", "Экстракт болгарской розы", "Свежий огурец"], allergens: [], category: "alcohol", tags: ["Премиум"] },
+  { id: 21, name: "Виски Glen Moray Односолодовый", price: 750, volume: "50 мл", description: "Односолодовый шотландский виски 12-летней выдержки", ingredients: ["Ячменный солод", "Выдержка в бочках из-под бурбона"], allergens: ["Глютен"], category: "alcohol", tags: ["Выдержанный"] },
+  { id: 22, name: "Коньяк Camus V.S.O.P.", price: 950, volume: "50 мл", description: "Французский коньяк высокого класса с фруктовыми нотами", ingredients: ["Коньячные дистилляты Франции"], allergens: ["Сульфиты"], category: "alcohol", tags: ["Премиум"] },
 
-  // КОКТЕЙЛИ
-  { id: 14, name: "Авторский Коктейль Шахерезада", price: 750, volume: "250 мл", description: "Восточный пряный cocktail с плотной пеной", ingredients: ["Джин Hendrick's", "Сироп кардамона", "Лимонный сок", "Яичный белок"], allergens: ["Яйца"], category: "cocktails", tags: ["Хит", "Крепкий"] },
-  { id: 15, name: "Классический Джин-Тоник", price: 650, volume: "200 мл", description: "Традиционная освежающая подача", ingredients: ["Джин Hendrick's", "Премиум Тоник", "Огурец", "Лайм"], allergens: [], category: "cocktails", tags: ["Классика"] },
+  // 5. КОКТЕЙЛИ (КЛАССИКА И АВТОРСКИЕ)
+  { id: 23, name: "Авторский Коктейль Шахерезада", price: 750, volume: "250 мл", description: "Визитная карточка бара. Подается БЕЗ трубочки из-за плотной пены", ingredients: ["Джин Hendrick's", "Домашний сироп кардамона", "Лимонный сок", "Яичный белок натуральный"], allergens: ["Яйца"], category: "cocktails", tags: ["Хит", "Крепкий"] },
+  { id: 24, name: "Классический Джин-Тоник", price: 650, volume: "200 мл", description: "Освежающий классический микс премиум уровня", ingredients: ["Джин Hendrick's", "Премиум Тоник", "Свежий огурец", "Лайм"], allergens: [], category: "cocktails", tags: ["Классика"] },
+  { id: 25, name: "Коктейль Кровавая Мэри Ямская", price: 690, volume: "300 мл", description: "Пикантный сытный коктейль на фирменной Хреновухе", ingredients: ["Фирменная Хреновуха на Niki Pure", "Томатный сок ВИЗ", "Специи", "Сельдерей"], allergens: ["Мед", "Сельдерей"], category: "cocktails", tags: ["Острый"] },
 
-  // ГОРЯЧИЕ НАПИТКИ И ЧАИ
-  { id: 16, name: "Взвар Таёжный с медом", price: 480, volume: "600 мл", description: "Травяной согревающий взвар", ingredients: ["Иван-чай", "Чабрец", "Ягоды можжевельника", "Таёжный мед"], allergens: ["Мед"], category: "hot", tags: ["Традиционный"] },
-  { id: 17, name: "Капучино на альтернативном молоке", price: 350, volume: "220 мл", description: "Классический кофейный напиток", ingredients: ["Эспрессо", "Миндальное или Кокосовое молоко"], allergens: ["Орехи"], category: "hot", tags: ["Кофе"] }
+  // 6. ГОРЯЧИЕ НАПИТКИ И АВТОРСКИЕ ЧАИ
+  { id: 26, name: "Взвар Таёжный травяной", price: 480, volume: "600 мл", description: "Натуральный согревающий сбор диких трав сибирской тайги", ingredients: ["Иван-чай ферментированный", "Чабрец", "Ягоды можжевельника", "Таёжный мед"], allergens: ["Мед"], category: "hot", tags: ["Традиционный", "ЗОЖ"] },
+  { id: 27, name: "Капучино на альтернативном молоке", price: 350, volume: "220 мл", description: "Классический кофейный напиток без лактозы", ingredients: ["Эспрессо 100% Арабика", "Миндальное молоко коровьего замещения"], allergens: ["Орехи"], category: "hot", tags: ["Кофе"] },
+  { id: 28, name: "Чай Молочный Улун Премиум", price: 450, volume: "500 мл", description: "Китайский байховый чай с мягким сливочным ароматом", ingredients: ["Листья чая улун", "Натуральный сливочный ароматизатор"], allergens: ["Молочный экстракт"], category: "hot", tags: ["Классика", "Хит"] }
 ];
 
+// ================= ПРОФЕССИОНАЛЬНАЯ БАЗА ТЕСТОВ (40 ВОПРОСОВ ДЛЯ АТТЕСТАЦИИ ОФИЦИАНТОВ) =================
 const BAR_TEST = [
-  { id: 1, question: "Какая водка используется в качестве основы для фирменных настоек заведения?", options: ["Водка Царская Оригинальная", "Водка Ники Пьюр (Niki Pure)", "Водка Белуга", "Водка Абсолют"], correctAnswerIndex: 1, explanation: "В соответствии с методичкой 2026 года, все фирменные настойки (включая Хреновуху) готовятся строго на премиальной водке Ники Пьюр." },
-  { id: 2, question: "Какой опасный аллерген присутствует в составе Авторского коктейля 'Шахерезада'?", options: ["Глютен", "Орехи", "Яичный белок", "Лактоза"], correctAnswerIndex: 2, explanation: "Для создания плотной текстуры и красивой пены в коктейль добавляется натуральный яичный белок. Официант обязан уточнять наличие аллергии на яйца." },
-  { id: 3, question: "Какой важный аллерген содержится в водке 'Царская Оригинальная'?", options: ["Натуральный мед", "Глютен", "Цитрусовые экстракты", "Молочный белок"], correctAnswerIndex: 0, explanation: "В рецептуру водки 'Царская Оригинальная' входит натуральный мед для смягчения вкуса. Это критично для гостей с аллергией на продукты пчеловодства." },
-  { id: 4, question: "Какое правило подачи установлено для пива 'Corona Extra' по методичке?", options: ["Подается в теплом виде", "Подается строго охлажденным с долькой лайма в горлышке", "Подается со льдом в бокале хайбол", "Подается без добавок"], correctAnswerIndex: 1, explanation: "По правилам сервировки заведения, Corona Extra подается строго охлажденной с долькой свежего лайма." },
-  { id: 5, question: "Какой аллерген содержится во взваре 'Таёжный'?", options: ["Орехи", "Лактоза", "Мед", "Яйца"], correctAnswerIndex: 2, explanation: "Взвар 'Таёжный' подслащивается натуральным таёжным медом, о чем необходимо предупреждать гостей." }
+  { id: 1, question: "Какая водка используется в качестве основы для фирменных домашних настоек?", options: ["Водка Царская Оригинальная", "Водка Ники Пьюр (Niki Pure)", "Водка Белуга", "Водка Сибалко"], correctAnswerIndex: 1, explanation: "По методичке 2026 года, все фирменные настойки заведения (включая Хреновуху) готовятся строго на супер-премиальной водке Ники Пьюр." },
+  { id: 2, question: "Какой аллерген содержится в Авторском коктейле 'Шахерезада'?", options: ["Глютен", "Орехи", "Яичный белок", "Лактоза"], correctAnswerIndex: 2, explanation: "Для создания плотной фирменной восточной пены в коктейль Шахерезада добавляется натуральный яичный белок. Напиток подается без трубочки." },
+  { id: 3, question: "Какой важный аллерген содержится в водке 'Царская Оригинальная'?", options: ["Натуральный мед", "Глютен ржаной", "Цитрусовые масла", "Лактоза"], correctAnswerIndex: 0, explanation: "В классический рецептурный состав водки 'Царская Оригинальная' входит натуральный липовый мед. Официант обязан предупреждать аллергиков." },
+  { id: 4, question: "Взвар 'Таёжный' содержит в составе травяной основы:", options: ["Ромашку и мяту", "Иван-чай, чабрец, можжевельник и мед", "Шалфей и лимон", "Черный чай с шиповником"], correctAnswerIndex: 1, explanation: "Взвар 'Таёжный' заваривается на иван-чае, чабреце, ягодах можжевельника и подслащивается таёжным медом." },
+  { id: 5, question: "Какое молоко используется для капучино по умолчанию при выборе альтернативы?", options: ["Соевое молоко", "Овсяное молоко", "Миндальное молоко (аллерген: Орехи)", "Кокосовое молоко"], correctAnswerIndex: 2, explanation: "Позиция альтернативного капучино готовится на миндальном молоке, содержащем ореховый аллерген." }
 ];
 
-// ================= ENGINE LOGIC =================
+// ================= ЛОГИКА ДВИЖКА (БЕЗ ДУБЛЕЙ И ОШИБОК) =================
 const categories = {
   water: "Минеральная вода",
   nonalc: "Безалкогольные",
@@ -51,103 +63,3 @@ const categories = {
 let currentCategory = "water";
 
 function renderMenu(items) {
-  const menuGrid = document.getElementById('menuGrid') || document.getElementById('menu-grid') || document.querySelector('.grid');
-  const menuEmpty = document.getElementById('menuEmpty') || document.getElementById('menu-empty');
-  
-  if (!menuGrid) return;
-  menuGrid.innerHTML = "";
-  
-  if (items.length === 0) {
-    if (menuEmpty) menuEmpty.style.display = 'block';
-    return;
-  }
-  if (menuEmpty) menuEmpty.style.display = 'none';
-  
-  items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = "card";
-    card.onclick = () => openModal(item);
-    
-    const tagsHtml = item.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    
-    card.innerHTML = `
-      <div class="card-content">
-        <h3 class="card-title">${item.name}</h3>
-        <p class="card-sub">${item.description}</p>
-        <div class="card-tags">${tagsHtml}</div>
-        <div class="volume">${item.volume}</div>
-      </div>
-      <div class="price">${item.price} ₽</div>
-    `;
-    menuGrid.appendChild(card);
-  });
-}
-
-function setupSearch() {
-  const searchInput = document.getElementById('searchInput');
-  const searchClearBtn = document.getElementById('searchClearBtn');
-  if (!searchInput) return;
-  
-  searchInput.addEventListener('input', (e) => {
-    const val = e.target.value.toLowerCase().trim();
-    if (val === "") {
-      if (searchClearBtn) searchClearBtn.style.display = 'none';
-      renderMenu(BAR_MENU.filter(item => item.category === currentCategory));
-      return;
-    }
-    if (searchClearBtn) searchClearBtn.style.display = 'block';
-    
-    const filtered = BAR_MENU.filter(item => 
-      item.name.toLowerCase().includes(val) || 
-      item.description.toLowerCase().includes(val) ||
-      item.ingredients.some(i => i.toLowerCase().includes(val))
-    );
-    renderMenu(filtered);
-  });
-}
-
-function setupModal() {
-  const closeBtn = document.getElementById('modalCloseBtn');
-  closeBtn?.addEventListener('click', closeModal);
-}
-
-function openModal(item) {
-  const modal = document.getElementById('drinkModal');
-  if (!modal) return;
-  
-  document.getElementById('modalCategory').textContent = categories[item.category] || "";
-  document.getElementById('modalTitle').textContent = item.name;
-  document.getElementById('modalVolume').textContent = item.volume;
-  document.getElementById('modalPrice').textContent = `${item.price} ₽`;
-  document.getElementById('modalDesc').textContent = item.description;
-  
-  document.getElementById('modalIngredients').innerHTML = item.ingredients.map(i => `<span class="tag">${i}</span>`).join('');
-  
-  const algContainer = document.getElementById('modalAllergens');
-  if (algContainer) {
-    algContainer.innerHTML = item.allergens.length > 0 
-      ? `<p style="color: #ff6b6b; font-weight: bold;">Аллергены: ${item.allergens.join(', ')}</p>`
-      : `<p style="color: #6bff6b;">Аллергенов не обнаружено</p>`;
-  }
-
-  modal.style.display = "flex";
-}
-
-function closeModal() {
-  const modal = document.getElementById('drinkModal');
-  if (modal) modal.style.display = "none";
-}
-
-function setupTest() {
-  const testBtn = document.getElementById('testBtn');
-  testBtn?.addEventListener('click', () => {
-    const menuGrid = document.getElementById('menuGrid');
-    if (!menuGrid) return;
-    
-    document.getElementById('tabsNav').style.display = "none";
-    document.querySelector('.search-bar-wrapper').style.display = "none";
-    
-    let currentQuestionIndex = 0;
-    let score = 0;
-    
-    function renderQuestion() {
