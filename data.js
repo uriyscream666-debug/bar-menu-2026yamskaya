@@ -65,7 +65,7 @@ function initApp() {
 }
 
 function renderTabs() {
-  const tabsScroll = document.getElementById('tabsScroll');
+  const tabsScroll = document.getElementById('tabs_scroll') || document.getElementById('tabsScroll') || document.getElementById('tabsNav') || document.getElementById('tabs');
   if (!tabsScroll) return;
   tabsScroll.innerHTML = "";
   
