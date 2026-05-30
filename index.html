@@ -1,77 +1,27 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Барная карта 2026 | Трактир / Шахерезада</title>
-  <link rel="preconnect" href="https://googleapis.com">
-  <link rel="preconnect" href="https://gstatic.com" crossorigin>
-  <link href="https://googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Барная карта 2026 | Ямская</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="app">
+        <header>
+            <h1>🍸 Барная карта 2026</h1>
+            <p>Трактир • Шахерезада • Ямская слобода</p>
+        </header>
 
-  <!-- Стартовый экран приветствия -->
-  <section class="hero" id="hero">
-    <div class="hero-ornament">✦ ✦ ✦</div>
-    <h1>Барная Карта 2026</h1>
-    <p>Трактир • Шахерезада • Летнее меню</p>
-    <button class="btn-gold" id="startBtn">Открыть Меню</button>
-  </section>
+        <nav class="categories" id="categoriesNav"></nav>
 
-  <!-- Главное приложение барной карты (Скрыто на старте) -->
-  <div id="app" style="display: none; max-width: 1200px; margin: 0 auto; padding: 1rem 1rem 4rem;">
-    
-    <!-- Кнопка тестирования официантов -->
-    <button id="testBtn" class="nav-btn" style="display:block; margin: 0 auto 1.5rem; padding: 0.6rem 1.5rem; background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; border-radius: 20px; font-weight:600; font-family:'Montserrat', sans-serif;">Тест по бару</button>
-    
-    <!-- Поле живого поиска -->
-    <div class="search-bar-wrapper" style="position: relative; margin-bottom: 1.5rem;">
-      <input type="text" id="searchInput" class="search-box" placeholder="Начните вводить название или ингредиент" style="width: 100%; padding: 0.8rem 1.2rem; background: var(--bg-card); border: 1px solid rgba(214,175,55,0.3); border-radius: 50px; color: var(--text-main); font-size: 1rem; outline: none;">
-      <button id="searchClearBtn" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gold); font-size: 1.2rem; cursor: pointer;" hidden>×</button>
+        <main class="menu-grid" id="menuGrid">
+            <p>Загрузка меню...</p>
+        </main>
     </div>
 
-    <!-- Контейнер для вкладок категорий (Скролл) -->
-    <div id="tabsNav" class="nav-scroller" style="margin-bottom: 1.5rem; display: flex; overflow-x: auto; gap: 0.5rem; padding-bottom: 0.5rem;">
-      <div id="tabs_scroll" style="display: flex; gap: 0.5rem;"></div>
-    </div>
-
-    <!-- Заглушка пустого поиска -->
-    <div id="menuEmpty" class="empty-message" style="text-align: center; color: var(--text-muted); padding: 2rem;" hidden>
-      По вашему запросу ничего не найдено. Попробуйте изменить поиск или выбрать другую категорию.
-    </div>
-
-    <!-- Сетка для динамических карточек меню -->
-    <main id="menuGrid" class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem;"></main>
-  </div>
-
-  <!-- Модальное окно для деталей напитка -->
-  <div class="modal-back" id="drinkModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(5px);">
-    <div class="modal-box" style="background: var(--bg-card); border: 2px solid var(--gold); border-radius: 12px; padding: 1.8rem; max-width: 500px; width: 100%; position: relative; text-align: center;">
-      <button class="modal-close" id="modalCloseBtn" style="position: absolute; top: 10px; right: 15px; font-size: 1.8rem; color: var(--gold); cursor: pointer; background: none; border: none;">&times;</button>
-      <span id="modalCategory" style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;"></span>
-      <h3 id="modalTitle" style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); margin: 0.5rem 0;"></h3>
-      <p id="modalDesc" style="color: var(--text-muted); font-style: italic; margin-bottom: 1rem; font-size: 0.95rem;"></p>
-      
-      <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; padding: 0.5rem 1rem; background: rgba(255,255,255,0.02); border-radius: 8px;">
-        <span id="modalVolume" style="color: var(--text-muted);"></span>
-        <span id="modalPrice" style="color: var(--gold); font-weight: bold; font-size: 1.2rem;"></span>
-      </div>
-
-      <div style="text-align: left; margin-bottom: 1rem;">
-        <h4 style="color: var(--gold); margin-bottom: 0.4rem; font-size: 0.9rem;">Состав:</h4>
-        <div id="modalIngredients" style="display: flex; flex-wrap: wrap; gap: 0.4rem;"></div>
-      </div>
-
-      <div style="text-align: left; margin-bottom: 1.5rem;">
-        <h4 style="color: var(--gold); margin-bottom: 0.4rem; font-size: 0.9rem;">Аллергены:</h4>
-        <div id="modalAllergens"></div>
-      </div>
-
-      <div class="modal-body"></div>
-    </div>
-  </div>
-
-  <script src="data.js"></script>
+    <script src="data.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
